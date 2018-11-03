@@ -319,6 +319,18 @@ export class List<T> {
   }
 
   /**
+   * Inserts an element into the List<T> at the specified index.
+   */
+  InsertRange(index: number, array: T[]): void | Error {
+    if (index < 0 || index > this._elements.length) {
+      throw new Error('Index is out of range.')
+    }
+    for (let i = 0; i < array.length; i++) {
+      this._elements.splice(index + i, 0, array[i])
+    }
+  }
+
+  /**
    * Produces the set intersection of two sequences by using the default equality comparer to compare values.
    */
   public Intersect(source: List<T>): List<T> {
@@ -554,6 +566,15 @@ export class List<T> {
   }
 
   /**
+   * Bypasses a specified number of elements at the end of a sequence and then returns the remaining elements.
+   */
+  public SkipLast(amount: number): List<T> {
+    return new List<T>(
+      this._elements.slice(0, Math.max(0, this._elements.length - amount))
+    )
+  }
+
+  /**
    * Bypasses elements in a sequence as long as a specified condition is true and then returns the remaining elements.
    */
   public SkipWhile(
@@ -588,6 +609,18 @@ export class List<T> {
    */
   public Take(amount: number): List<T> {
     return new List<T>(this._elements.slice(0, Math.max(0, amount)))
+  }
+
+  /**
+   * Returns a specified number of contiguous elements from the end of a sequence.
+   */
+  public TakeLast(amount: number): List<T> {
+    return new List<T>(
+      this._elements.slice(
+        this._elements.length - amount,
+        this._elements.length
+      )
+    )
   }
 
   /**

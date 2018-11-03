@@ -388,6 +388,37 @@ test('Insert', t => {
   )
 })
 
+test('InsertRange', t => {
+  const pets = new List<Pet>([
+    new Pet({ Age: 10, Name: 'Barley' }),
+    new Pet({ Age: 4, Name: 'Boots' }),
+    new Pet({ Age: 6, Name: 'Whiskers' })
+  ])
+
+  const result = new List<Pet>([
+    new Pet({ Age: 10, Name: 'Barley' }),
+    new Pet({ Age: 13, Name: 'Glover' }),
+    new Pet({ Age: 14, Name: 'Haiko' }),
+    new Pet({ Age: 4, Name: 'Boots' }),
+    new Pet({ Age: 6, Name: 'Whiskers' })
+  ])
+
+  let newPets = [
+    new Pet({ Age: 13, Name: 'Glover' }),
+    new Pet({ Age: 14, Name: 'Haiko' })
+  ]
+
+  pets.InsertRange(1, newPets)
+
+  t.deepEqual(pets, result)
+
+  t.throws(() => pets.InsertRange(-1, newPets), /Index is out of range./)
+  t.throws(
+    () => pets.InsertRange(pets.Count() + 1, newPets),
+    /Index is out of range./
+  )
+})
+
 test('Intersect', t => {
   const id1 = new List<number>([44, 26, 92, 30, 71, 38])
   const id2 = new List<number>([39, 59, 83, 47, 26, 4, 30])
@@ -779,6 +810,17 @@ test('Skip', t => {
   )
 })
 
+test('SkipLast', t => {
+  const grades = new List<number>([59, 82, 70, 56, 92, 98, 85])
+  t.deepEqual(
+    grades
+      .OrderByDescending(x => x)
+      .SkipLast(3)
+      .ToArray(),
+    [98, 92, 85, 82]
+  )
+})
+
 test('SkipWhile', t => {
   const grades = new List<number>([59, 82, 70, 56, 92, 98, 85])
   t.deepEqual(
@@ -808,6 +850,17 @@ test('Take', t => {
       .Take(3)
       .ToArray(),
     [98, 92, 85]
+  )
+})
+
+test('TakeLast', t => {
+  const grades = new List<number>([59, 82, 70, 56, 92, 98, 85])
+  t.deepEqual(
+    grades
+      .OrderByDescending(x => x)
+      .TakeLast(3)
+      .ToArray(),
+    [70, 59, 56]
   )
 })
 
